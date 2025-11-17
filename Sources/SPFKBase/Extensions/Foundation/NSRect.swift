@@ -15,8 +15,4 @@ extension NSRect {
     public init(width: Int, height: Int) {
         self = NSRect(x: 0, y: 0, width: width, height: height)
     }
-    
-//    public init(x: CGFloat, y: CGFloat, width: CGFloat, height: CGFloat) {
-//        self = NSRect(origin: CGPoint(x: x, y: y), size: CGSize(width: width, height: height))
-//    }
 }
