@@ -1,2 +1,3 @@
-# SPFKBase
-Base layer to SPFK packages
+# SPFK
+
+A package with a C based target.
