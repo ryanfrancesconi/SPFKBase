@@ -1,3 +1,3 @@
 # SPFK
 
-A package with a C based target.
+Base layer to SPFK packages
