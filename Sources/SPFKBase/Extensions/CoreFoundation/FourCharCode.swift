@@ -67,9 +67,12 @@ extension FourCharCode {
 
 extension OSStatus {
     /// Create a String representation of a FourCC.
-    public func fourCharCodeToString() -> String? {
-        guard self >= 0 else { return nil }
+    public func fourCharCodeToString() -> String {
+        guard self >= 0 else {
+            return String(describing: self)
+        }
 
-        return FourCharCode(self).fourCharCodeToString()
+        return FourCharCode(self).fourCharCodeToString() ??
+            "????"
     }
 }
