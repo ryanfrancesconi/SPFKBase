@@ -28,6 +28,8 @@ private let dependencies: [PackageDescription.Package.Dependency] = [
     .package(url: "https://github.com/apple/swift-atomics.git", from: "1.1.0"),
     .package(url: "https://github.com/apple/swift-numerics", from: "1.0.0"),
     .package(url: "https://github.com/apple/swift-collections.git", branch: "main"),
+    .package(url: "https://github.com/apple/swift-async-algorithms.git", branch: "main"),
+
 ]
 
 private let targets: [PackageDescription.Target] = [
@@ -39,6 +41,8 @@ private let targets: [PackageDescription.Target] = [
             .product(name: "Atomics", package: "swift-atomics"),
             .product(name: "Collections", package: "swift-collections"),
             .product(name: "Numerics", package: "swift-numerics"),
+            .product(name: "AsyncAlgorithms", package: "swift-async-algorithms")
+            
         ]
     ),
     

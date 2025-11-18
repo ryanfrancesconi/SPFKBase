@@ -10,11 +10,14 @@ open class BinTestCase: TestCaseModel {
     /// in cases where you want to check the actual files after the test completes
     /// can set this to false to leave in temp
     public var deleteBinOnExit = true
-
-    public init() {}
+    
+    public init() async {}
 
     deinit {
-        guard deleteBinOnExit, bin != defaultURL else { return }
+        guard deleteBinOnExit,
+              bin.exists,
+              bin != defaultURL
+        else { return }
         removeBin()
     }
 }

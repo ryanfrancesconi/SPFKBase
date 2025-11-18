@@ -4,9 +4,9 @@ import Foundation
 
 extension NSError {
     public convenience init(
-        description: String,
-        domain: String = Bundle.main.bundleIdentifier ?? "com.spongefork",
-        code: Int = 1
+        domain: String = Log.defaultSubsystem,
+        code: Int = 1,
+        description: String
     ) {
         let userInfo: [String: Any] = [
             NSLocalizedDescriptionKey: description,

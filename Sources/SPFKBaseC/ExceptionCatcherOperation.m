@@ -1,6 +1,6 @@
 // Copyright AudioKit. All Rights Reserved. Revision History at http://github.com/AudioKit/AudioKit/
 
-#import "ExceptionCatcher.h"
+#import "ExceptionCatcherOperation.h"
 
 void ExceptionCatcherOperation(void (^ _Nonnull tryBlock)(void),
                                void (^ _Nullable catchBlock)(NSException * _Nonnull))

@@ -9,7 +9,7 @@ public struct Log {
     /// Set once immediately on app launch. Then app and all packages can read it.
     nonisolated(unsafe) public static var buildConfig: BuildConfig = .debug
 
-    static let defaultSubsystem: String = {
+    public static let defaultSubsystem: String = {
         Bundle.main.bundleIdentifier ?? "com.spongefork"
     }()
 
