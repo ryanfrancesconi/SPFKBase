@@ -40,7 +40,7 @@ extension NotificationCenter {
         }
 
         guard let notification else {
-            throw NSError(description: "Failed to get \(notificationName)")
+            throw NSError(description: "Failed to get \(notificationName) due to timeout")
         }
 
         return notification
