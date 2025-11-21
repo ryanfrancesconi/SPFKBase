@@ -25,6 +25,7 @@ private let products: [PackageDescription.Product] = [
 ]
 
 private let dependencies: [PackageDescription.Package.Dependency] = [
+    .package(url: "https://github.com/orchetect/OTCore", branch: "main"),
     .package(url: "https://github.com/apple/swift-atomics.git", from: "1.1.0"),
     .package(url: "https://github.com/apple/swift-numerics", from: "1.0.0"),
     .package(url: "https://github.com/apple/swift-collections.git", branch: "main"),
@@ -38,6 +39,7 @@ private let targets: [PackageDescription.Target] = [
         name: name,
         dependencies: [
             .target(name: nameC),
+            .byNameItem(name: "OTCore", condition: nil),
             .product(name: "Atomics", package: "swift-atomics"),
             .product(name: "Collections", package: "swift-collections"),
             .product(name: "Numerics", package: "swift-numerics"),
