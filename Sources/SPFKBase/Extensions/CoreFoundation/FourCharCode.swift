@@ -12,14 +12,12 @@ extension FourCharCode {
     public var fourCC: String {
         guard self > 0 else { return Self.unknown }
 
-        // nullTerminatedUTF8
-        let out = String(cString: [
+        let out = String(decoding: [
             UInt8(self >> 24),
             UInt8((self >> 16) & 0xFF),
             UInt8((self >> 8) & 0xFF),
-            UInt8(self & 0xFF),
-            0,
-        ])
+            UInt8(self & 0xFF)
+        ], as: UTF8.self)
 
         // "\u{fffd}\u{fffd}\u{fffd}"
 
