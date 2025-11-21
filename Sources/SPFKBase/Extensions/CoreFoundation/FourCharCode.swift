@@ -16,7 +16,7 @@ extension FourCharCode {
             UInt8(self >> 24),
             UInt8((self >> 16) & 0xFF),
             UInt8((self >> 8) & 0xFF),
-            UInt8(self & 0xFF)
+            UInt8(self & 0xFF),
         ], as: UTF8.self)
 
         // "\u{fffd}\u{fffd}\u{fffd}"
@@ -28,19 +28,18 @@ extension FourCharCode {
 
         return out
     }
+}
 
-//    public func fromHFSTypeCode() -> String {
-//        // returns with single quotes 'abcd' around the string
-//        guard var string = NSFileTypeForHFSTypeCode(self) else {
-//            return ""
-//        }
-//
-//        if string.count == 6, string.first == "'", string.last == "'" {
-//            string = String(string.dropFirst().dropLast())
-//        }
-//
-//        return string
-//    }
+/// aka SInt32
+extension OSStatus {
+    /// Create a String representation of a FourCC.
+    public var fourCC: String {
+        guard self >= 0 else {
+            return String(describing: self)
+        }
+
+        return FourCharCode(self).fourCC
+    }
 }
 
 extension String {
@@ -57,17 +56,5 @@ extension String {
         }
 
         return out
-    }
-}
-
-/// SInt32
-extension OSStatus {
-    /// Create a String representation of a FourCC.
-    public var fourCC: String {
-        guard self >= 0 else {
-            return String(describing: self)
-        }
-
-        return FourCharCode(self).fourCC
     }
 }
