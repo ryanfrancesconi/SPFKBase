@@ -10,7 +10,8 @@ private let name: String = "SPFKBase"
 private let nameC: String = "\(name)C"
 
 private let platforms: [PackageDescription.SupportedPlatform]? = [
-    .macOS(.v12)
+    .macOS(.v12),
+    .iOS(.v15),
 ]
 
 private let products: [PackageDescription.Product] = [
@@ -57,20 +58,11 @@ private let targets: [PackageDescription.Target] = [
         ]
     ),
     
-//    .binaryTarget(
-//        name: "tag",
-//        path: "Frameworks/NAME.xcframework"
-//    ),
-
-
     .testTarget(
         name: "\(name)Tests",
         dependencies: [
             .byNameItem(name: name, condition: nil),
             .byNameItem(name: nameC, condition: nil),
-        ],
-        resources: [
-            .process("Resources")
         ]
     )
 ]

@@ -1,14 +1,13 @@
-import CoreAudio
 import Foundation
 @testable import SPFKBase
 import Testing
 
 class FourCharCodeTests: TestCaseModel {
     @Test func convert() {
-        let fcc: FourCharCode = kAudioDevicePropertyHogMode
+        let fcc: FourCharCode = 1869180523 //kAudioDevicePropertyHogMode
 
         #expect(fcc.fourCC == "oink")
-        #expect("oink".fourCC == kAudioDevicePropertyHogMode)
+        #expect("oink".fourCC == 1869180523)
         
         let rhombus = "\(FourCharCode.rhombus)\(FourCharCode.rhombus)\(FourCharCode.rhombus)\(FourCharCode.rhombus)"
         

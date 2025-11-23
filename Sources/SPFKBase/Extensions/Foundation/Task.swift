@@ -4,7 +4,7 @@ import Foundation
 
 extension Task where Success == Never, Failure == Never {
     public static func sleep(seconds: TimeInterval) async throws {
-        if #available(macOS 13, *) {
+        if #available(macOS 13, iOS 16, *) {
             try await Task.sleep(for: .seconds(seconds))
 
         } else {

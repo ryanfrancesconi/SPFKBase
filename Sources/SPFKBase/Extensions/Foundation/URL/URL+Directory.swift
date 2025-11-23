@@ -62,7 +62,7 @@ extension URL {
     }
 
     public func appendingBackwardsCompatible(queryItems: [URLQueryItem]) -> URL? {
-        if #available(macOS 13.0, *) {
+        if #available(macOS 13.0, iOS 16.0, *) {
             return self.appending(queryItems: queryItems)
 
         } else {

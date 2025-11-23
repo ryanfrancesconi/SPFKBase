@@ -41,11 +41,6 @@ extension URL {
         return value.contentModificationDate
     }
 
-    public var lastOpened: Date? {
-        let itemRef = MDItemCreateWithURL(nil, self as CFURL)
-        return MDItemCopyAttribute(itemRef, kMDItemLastUsedDate) as? Date
-    }
-
     public var isDirectory: Bool {
         guard let value = try? resourceValues(forKeys: [.isDirectoryKey]) else { return false }
         return value.isDirectory == true
@@ -72,3 +67,12 @@ extension URL {
         return value.isHidden == true
     }
 }
+
+#if os(macOS)
+    extension URL {
+        public var lastOpened: Date? {
+            let itemRef = MDItemCreateWithURL(nil, self as CFURL)
+            return MDItemCopyAttribute(itemRef, kMDItemLastUsedDate) as? Date
+        }
+    }
+#endif // os(macOS)

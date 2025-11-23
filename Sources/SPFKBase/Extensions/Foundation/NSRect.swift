@@ -3,16 +3,16 @@
 import CoreGraphics
 import Foundation
 
-extension NSRect {
-    public init(size: NSSize) {
-        self = NSRect(origin: CGPoint(x: 0, y: 0), size: size)
+extension CGRect {
+    public init(size: CGSize) {
+        self = CGRect(origin: CGPoint(x: 0, y: 0), size: size)
     }
 
     public init(width: CGFloat, height: CGFloat) {
-        self = NSRect(x: 0, y: 0, width: width, height: height)
+        self = CGRect(x: 0, y: 0, width: width, height: height)
     }
 
     public init(width: Int, height: Int) {
-        self = NSRect(x: 0, y: 0, width: width, height: height)
+        self = CGRect(x: 0, y: 0, width: width, height: height)
     }
 }
