@@ -26,18 +26,18 @@ extension RangeReplaceableCollection where Iterator.Element: ExpressibleByIntege
     }
 }
 
-public extension Array where Element: Equatable {
-    mutating func move(_ item: Element, to newIndex: Index) {
+extension Array where Element: Equatable {
+    public mutating func move(_ item: Element, to newIndex: Index) {
         if let index = firstIndex(of: item), index != newIndex {
             move(at: index, to: newIndex)
         }
     }
 
-    mutating func bringToFront(item: Element) {
+    public mutating func bringToFront(item: Element) {
         move(item, to: 0)
     }
 
-    mutating func sendToBack(item: Element) {
+    public mutating func sendToBack(item: Element) {
         move(item, to: endIndex - 1)
     }
 }
