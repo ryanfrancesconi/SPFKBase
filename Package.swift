@@ -2,69 +2,142 @@
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
+import Foundation
 
-// Swift target
-private let name: String = "SPFKBase"
-
-// C/C++ target
-private let nameC: String = "\(name)C"
-
+private let name: String = "SPFKBase" // Swift target
+private let dependencyNames: [String] = []
+private let dependencyNamesC: [String] = []
+private let dependencyBranch = "main"
+private let useLocalDependencies: Bool = false
 private let platforms: [PackageDescription.SupportedPlatform]? = [
     .macOS(.v12),
-    .iOS(.v15),
+    .iOS(.v15)
 ]
+
+let remoteDependencies: [RemoteDependency] = [
+    .init(package: .package(url: "https://github.com/orchetect/OTCore", branch: "main"),
+          product: .product(name: "OTCore", package: "OTCore")),
+    .init(package: .package(url: "https://github.com/apple/swift-atomics.git", from: "1.1.0"),
+          product: .product(name: "Atomics", package: "swift-atomics")),
+    .init(package: .package(url: "https://github.com/apple/swift-numerics", from: "1.0.0"),
+          product: .product(name: "Numerics", package: "swift-numerics")),
+    .init(package: .package(url: "https://github.com/apple/swift-collections.git", branch: "main"),
+          product: .product(name: "Collections", package: "swift-collections")),
+    .init(package: .package(url: "https://github.com/apple/swift-async-algorithms.git", branch: "main"),
+          product: .product(name: "AsyncAlgorithms", package: "swift-async-algorithms"))
+]
+
+// MARK: - Reusable Code for a Swift + C package
+
+struct RemoteDependency {
+    let package: PackageDescription.Package.Dependency
+    let product: PackageDescription.Target.Dependency
+}
+
+private let nameC: String = "\(name)C" // C/C++ target
+private let nameTests: String = "\(name)Tests" // Test target
+private let githubBase = "https://github.com/ryanfrancesconi"
 
 private let products: [PackageDescription.Product] = [
-    .library(
-        name: name,
-        targets: [name, nameC]
-    )
+    .library(name: name, targets: [name, nameC])
 ]
 
-private let dependencies: [PackageDescription.Package.Dependency] = [
-    .package(url: "https://github.com/orchetect/OTCore", branch: "main"),
-    .package(url: "https://github.com/apple/swift-atomics.git", from: "1.1.0"),
-    .package(url: "https://github.com/apple/swift-numerics", from: "1.0.0"),
-    .package(url: "https://github.com/apple/swift-collections.git", branch: "main"),
-    .package(url: "https://github.com/apple/swift-async-algorithms.git", branch: "main"),
+private var packageDependencies: [PackageDescription.Package.Dependency] {
+     let local: [PackageDescription.Package.Dependency] =
+        dependencyNames.map {
+            .package(name: "\($0)", path: "../\($0)") // assumes the package garden is in one folder
+        }
 
-]
+        
+     let remote: [PackageDescription.Package.Dependency] =
+        dependencyNames.map {
+            .package(url: "\(githubBase)/\($0)", branch: dependencyBranch)
+        }
+    
+    var value = useLocalDependencies ? local : remote
+    
+    if !remoteDependencies.isEmpty {
+        value.append(contentsOf: remoteDependencies.map { $0.package } )
+    }
+    
+    return value
+}
+
+// is there a Sources/[NAME]/Resources folder?
+private var swiftTargetResources: [PackageDescription.Resource]? {
+    // package folder
+    let root = URL(fileURLWithPath: #file).deletingLastPathComponent()
+    
+    let dir = root.appending(component: "Sources")
+        .appending(component: name)
+        .appending(component: "Resources")
+    
+    let exists = FileManager.default.fileExists(atPath: dir.path)
+    
+    return exists ? [.process("Resources")] : nil
+}
+
+private var swiftTargetDependencies: [PackageDescription.Target.Dependency] {
+    let names = dependencyNames.filter { $0 != "SPFKTesting" }
+    
+    var value: [PackageDescription.Target.Dependency] = names.map {
+        .byNameItem(name: "\($0)", condition: nil)
+    }
+    
+    value.append(.target(name: nameC))
+    
+    if !remoteDependencies.isEmpty {
+        value.append(contentsOf: remoteDependencies.map { $0.product } )
+    }
+    
+    return value
+}
+
+private let swiftTarget: PackageDescription.Target = .target(
+    name: name,
+    dependencies: swiftTargetDependencies,
+    resources: swiftTargetResources
+)
+
+private var testTargetDependencies: [PackageDescription.Target.Dependency] {
+    var array: [PackageDescription.Target.Dependency] = [
+        .byNameItem(name: name, condition: nil),
+        .byNameItem(name: nameC, condition: nil),
+    ]
+
+    if dependencyNames.contains("SPFKTesting") {
+        array.append(.byNameItem(name: "SPFKTesting", condition: nil))
+    }
+    
+    return array
+}
+
+private let testTarget: PackageDescription.Target = .testTarget(
+    name: nameTests,
+    dependencies: testTargetDependencies
+)
+
+private var cTargetDependencies: [PackageDescription.Target.Dependency] {
+    dependencyNamesC.map {
+        .byNameItem(name: "\($0)", condition: nil)
+    }
+}
+
+private let cTarget: PackageDescription.Target = .target(
+    name: nameC,
+    dependencies: cTargetDependencies,
+    publicHeadersPath: "include",
+    cSettings: [
+        .headerSearchPath("include_private")
+    ],
+    cxxSettings: [
+        .headerSearchPath("include_private")
+    ]
+)
+
 
 private let targets: [PackageDescription.Target] = [
-    // Swift
-    .target(
-        name: name,
-        dependencies: [
-            .target(name: nameC),
-            .byNameItem(name: "OTCore", condition: nil),
-            .product(name: "Atomics", package: "swift-atomics"),
-            .product(name: "Collections", package: "swift-collections"),
-            .product(name: "Numerics", package: "swift-numerics"),
-            .product(name: "AsyncAlgorithms", package: "swift-async-algorithms")
-            
-        ]
-    ),
-    
-    // C
-    .target(
-        name: nameC,
-        dependencies: [],
-        publicHeadersPath: "include",
-        cSettings: [
-            .headerSearchPath("include_private")
-        ],
-        cxxSettings: [
-            .headerSearchPath("include_private")
-        ]
-    ),
-    
-    .testTarget(
-        name: "\(name)Tests",
-        dependencies: [
-            .byNameItem(name: name, condition: nil),
-            .byNameItem(name: nameC, condition: nil),
-        ]
-    )
+    swiftTarget, cTarget, testTarget
 ]
 
 let package = Package(
@@ -72,7 +145,7 @@ let package = Package(
     defaultLocalization: "en",
     platforms: platforms,
     products: products,
-    dependencies: dependencies,
+    dependencies: packageDependencies,
     targets: targets,
     cxxLanguageStandard: .cxx20
 )
