@@ -10,20 +10,18 @@ private let dependencyBranch: String = "development"
 private var useLocalDependencies: Bool = false
 private let platforms: [PackageDescription.SupportedPlatform]? = [
     .macOS(.v12),
-    .iOS(.v15)
+    .iOS(.v15),
 ]
 
 let remoteDependencies: [RemoteDependency] = [
     .init(package: .package(url: "https://github.com/orchetect/OTCore", branch: "main"),
           product: .product(name: "OTCore", package: "OTCore")),
-    .init(package: .package(url: "https://github.com/apple/swift-atomics.git", from: "1.1.0"),
-          product: .product(name: "Atomics", package: "swift-atomics")),
     .init(package: .package(url: "https://github.com/apple/swift-numerics", from: "1.0.0"),
           product: .product(name: "Numerics", package: "swift-numerics")),
     .init(package: .package(url: "https://github.com/apple/swift-collections.git", branch: "main"),
           product: .product(name: "Collections", package: "swift-collections")),
     .init(package: .package(url: "https://github.com/apple/swift-async-algorithms.git", branch: "main"),
-          product: .product(name: "AsyncAlgorithms", package: "swift-async-algorithms"))
+          product: .product(name: "AsyncAlgorithms", package: "swift-async-algorithms")),
 ]
 
 // MARK: - Reusable Code for a dual Swift + C package
@@ -38,7 +36,7 @@ private let nameTests: String = "\(name)Tests" // Test target
 private let githubBase = "https://github.com/ryanfrancesconi"
 
 private let products: [PackageDescription.Product] = [
-    .library(name: name, targets: [name, nameC])
+    .library(name: name, targets: [name, nameC]),
 ]
 
 private var packageDependencies: [PackageDescription.Package.Dependency] {
@@ -79,7 +77,7 @@ private let swiftTarget: PackageDescription.Target = .target(
 private var testTargetDependencies: [PackageDescription.Target.Dependency] {
     var array: [PackageDescription.Target.Dependency] = [
         .byNameItem(name: name, condition: nil),
-        .byNameItem(name: nameC, condition: nil)
+        .byNameItem(name: nameC, condition: nil),
     ]
 
     if dependencyNames.contains("SPFKTesting") {
@@ -105,15 +103,15 @@ private let cTarget: PackageDescription.Target = .target(
     dependencies: cTargetDependencies,
     publicHeadersPath: "include",
     cSettings: [
-        .headerSearchPath("include_private")
+        .headerSearchPath("include_private"),
     ],
     cxxSettings: [
-        .headerSearchPath("include_private")
+        .headerSearchPath("include_private"),
     ]
 )
 
 private let targets: [PackageDescription.Target] = [
-    swiftTarget, cTarget, testTarget
+    swiftTarget, cTarget, testTarget,
 ]
 
 let package = Package(
