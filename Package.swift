@@ -14,8 +14,8 @@ private let platforms: [PackageDescription.SupportedPlatform]? = [
 ]
 
 let remoteDependencies: [RemoteDependency] = [
-    .init(package: .package(url: "https://github.com/orchetect/OTCore", branch: "main"),
-          product: .product(name: "OTCore", package: "OTCore")),
+    .init(package: .package(url: "https://github.com/orchetect/swift-extensions", branch: "main"),
+          product: .product(name: "SwiftExtensions", package: "swift-extensions")),
     .init(package: .package(url: "https://github.com/apple/swift-numerics", from: "1.0.0"),
           product: .product(name: "Numerics", package: "swift-numerics")),
     .init(package: .package(url: "https://github.com/apple/swift-collections.git", branch: "main"),
