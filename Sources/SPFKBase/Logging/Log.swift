@@ -4,14 +4,12 @@ import Foundation
 import os.log
 
 /// A simple wrapper on os_log for supporting debug, info or errors out.
-public struct Log {
+public enum Log {
     /// Global build config variable.
     /// Set once immediately on app launch. Then app and all packages can read it.
-    nonisolated(unsafe) public static var buildConfig: BuildConfig = .debug
+    public nonisolated(unsafe) static var buildConfig: BuildConfig = .debug
 
-    public static let defaultSubsystem: String = {
-        Bundle.main.bundleIdentifier ?? "com.spongefork"
-    }()
+    public static let defaultSubsystem: String = Bundle.main.bundleIdentifier ?? "com.spongefork"
 
     @inline(__always)
     static let defaultLog = OSLog(subsystem: defaultSubsystem, category: "Info")
@@ -42,7 +40,7 @@ public struct Log {
         file: String = #file,
         function: String = #function,
         line: Int = #line,
-        _ items: Any?...
+        _ items: Any?...,
     ) -> String {
         let fileName = (file as NSString).lastPathComponent
 
@@ -62,7 +60,7 @@ public struct Log {
         file: String = #file,
         function: String = #function,
         line: Int = #line,
-        _ items: Any?...
+        _ items: Any?...,
     ) {
         autoreleasepool {
             let message = assembleMessage(file: file, function: function, line: line, items)
@@ -75,7 +73,7 @@ public struct Log {
         file: String = #file,
         function: String = #function,
         line: Int = #line,
-        _ items: Any?...
+        _ items: Any?...,
     ) {
         guard buildConfig != .release else { return }
 
@@ -90,7 +88,7 @@ public struct Log {
         file: String = #file,
         function: String = #function,
         line: Int = #line,
-        _ items: Any?...
+        _ items: Any?...,
     ) {
         autoreleasepool {
             let message = "🚩 " + assembleMessage(file: file, function: function, line: line, items)
@@ -101,12 +99,12 @@ public struct Log {
     public static func printCallStack() {
         var lines: [String] = ["\n"]
 
-        Thread.callStackSymbols.forEach {
-            lines.append($0)
+        for callStackSymbol in Thread.callStackSymbols {
+            lines.append(callStackSymbol)
         }
 
         Log.error(
-            lines.joined(separator: "\n")
+            lines.joined(separator: "\n"),
         )
     }
 }
