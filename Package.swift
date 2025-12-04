@@ -14,6 +14,7 @@ let package = Package(
             name: "SPFKBase",
             targets: [
                 "SPFKBase",
+                "SPFKBaseC",
             ]
         ),
     ],
