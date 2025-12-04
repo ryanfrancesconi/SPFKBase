@@ -55,5 +55,6 @@ let package = Package(
                 "SPFKBaseC"
             ]
         ),
-    ]
+    ],
+    cxxLanguageStandard: .cxx20
 )
