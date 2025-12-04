@@ -5,6 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "spfk-base",
+    defaultLocalization: "en",
     platforms: [
         .macOS(.v12),
         .iOS(.v15),
