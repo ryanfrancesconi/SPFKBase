@@ -20,6 +20,8 @@ let package = Package(
         ),
     ],
     dependencies: [
+        .package(url: "https://github.com/ryanfrancesconi/spfk-testing", branch: "development"),
+
         .package(url: "https://github.com/orchetect/swift-extensions", from: "2.0.0"),
         .package(url: "https://github.com/apple/swift-numerics", from: "1.1.1"),
         .package(url: "https://github.com/apple/swift-collections", from: "1.3.0"),
@@ -54,7 +56,8 @@ let package = Package(
             name: "SPFKBaseTests",
             dependencies: [
                 "SPFKBase",
-                "SPFKBaseC"
+                "SPFKBaseC",
+                .product(name: "SPFKTesting", package: "spfk-testing"),
             ]
         ),
     ],
