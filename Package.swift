@@ -27,6 +27,7 @@ let package = Package(
         .target(
             name: "SPFKBase",
             dependencies: [
+                "SPFKBaseC",
                 .product(name: "SwiftExtensions", package: "swift-extensions"),
                 .product(name: "Numerics", package: "swift-numerics"),
                 .product(name: "Collections", package: "swift-collections"),
