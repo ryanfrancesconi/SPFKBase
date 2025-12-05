@@ -9,6 +9,8 @@ public enum Log {
     /// Set once immediately on app launch. Then app and all packages can read it.
     public nonisolated(unsafe) static var buildConfig: BuildConfig = .debug
 
+    public nonisolated(unsafe) static var assertOnError: Bool = false
+
     public static let defaultSubsystem: String = Bundle.main.bundleIdentifier ?? "com.spongefork"
 
     @inline(__always)
@@ -92,6 +94,12 @@ public enum Log {
     ) {
         autoreleasepool {
             let message = "🚩 " + assembleMessage(file: file, function: function, line: line, items)
+
+            guard !assertOnError else {
+                assertionFailure(message)
+                return
+            }
+
             logError(message)
         }
     }
