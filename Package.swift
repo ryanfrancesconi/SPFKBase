@@ -6,22 +6,15 @@ import PackageDescription
 let package = Package(
     name: "spfk-base",
     defaultLocalization: "en",
-    platforms: [
-        .macOS(.v12),
-        .iOS(.v15),
-    ],
+    platforms: [.macOS(.v12), .iOS(.v15),],
     products: [
         .library(
             name: "SPFKBase",
-            targets: [
-                "SPFKBase",
-                "SPFKBaseC",
-            ]
+            targets: ["SPFKBase", "SPFKBaseC",]
         ),
     ],
     dependencies: [
         .package(url: "https://github.com/ryanfrancesconi/spfk-testing", branch: "development"),
-
         .package(url: "https://github.com/orchetect/swift-extensions", from: "2.0.0"),
         .package(url: "https://github.com/apple/swift-numerics", from: "1.1.1"),
         .package(url: "https://github.com/apple/swift-collections", from: "1.3.0"),
@@ -31,18 +24,16 @@ let package = Package(
         .target(
             name: "SPFKBase",
             dependencies: [
-                "SPFKBaseC",
+                .targetItem(name: "SPFKBaseC", condition: nil),
                 .product(name: "SwiftExtensions", package: "swift-extensions"),
                 .product(name: "Numerics", package: "swift-numerics"),
                 .product(name: "Collections", package: "swift-collections"),
                 .product(name: "AsyncAlgorithms", package: "swift-async-algorithms"),
             ]
         ),
-
         .target(
             name: "SPFKBaseC",
-            dependencies: [
-            ],
+            dependencies: [],
             publicHeadersPath: "include",
             cSettings: [
                 .headerSearchPath("include_private")
@@ -51,12 +42,11 @@ let package = Package(
                 .headerSearchPath("include_private")
             ]
         ),
-
         .testTarget(
             name: "SPFKBaseTests",
             dependencies: [
-                "SPFKBase",
-                "SPFKBaseC",
+                .targetItem(name: "SPFKBase", condition: nil),
+                .targetItem(name: "SPFKBaseC", condition: nil),
                 .product(name: "SPFKTesting", package: "spfk-testing"),
             ]
         ),
