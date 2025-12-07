@@ -104,12 +104,8 @@ public enum Log {
         line: Int = #line,
         _ items: Any?...,
     ) {
-        autoreleasepool {
-            let message = "⛔️ " + assembleMessage(file: file, function: function, line: line, items)
-
-            logError(message)
-            assertionFailure(message)
-        }
+        let message = "⛔️ " + assembleMessage(file: file, function: function, line: line, items)
+        Swift.assertionFailure(message)
     }
 
     public static func printCallStack() {
