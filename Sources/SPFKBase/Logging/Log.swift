@@ -1,4 +1,4 @@
-// Copyright Ryan Francesconi. All Rights Reserved. Revision History at https://github.com/ryanfrancesconi/SPFKUtils
+// Copyright Ryan Francesconi. All Rights Reserved. Revision History at https://github.com/ryanfrancesconi/spfk-utils
 
 import Foundation
 import os.log
@@ -8,8 +8,6 @@ public enum Log {
     /// Global build config variable.
     /// Set once immediately on app launch. Then app and all packages can read it.
     public nonisolated(unsafe) static var buildConfig: BuildConfig = .debug
-
-    public nonisolated(unsafe) static var assertOnError: Bool = false
 
     public static let defaultSubsystem: String = Bundle.main.bundleIdentifier ?? "com.spongefork"
 
@@ -95,12 +93,22 @@ public enum Log {
         autoreleasepool {
             let message = "🚩 " + assembleMessage(file: file, function: function, line: line, items)
 
-            guard !assertOnError else {
-                assertionFailure(message)
-                return
-            }
+            logError(message)
+        }
+    }
+
+    @inline(__always)
+    public static func assertionFailure(
+        file: String = #file,
+        function: String = #function,
+        line: Int = #line,
+        _ items: Any?...,
+    ) {
+        autoreleasepool {
+            let message = "⛔️ " + assembleMessage(file: file, function: function, line: line, items)
 
             logError(message)
+            assertionFailure(message)
         }
     }
 
