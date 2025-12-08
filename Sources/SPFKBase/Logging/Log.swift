@@ -3,7 +3,7 @@
 import Foundation
 import os.log
 
-/// A simple wrapper on os_log for supporting debug, info or errors out.
+/// A simple wrapper on os_log for supporting debug, info errors, and debug signposts.
 public enum Log {
     /// Global build config variable.
     /// Set once immediately on app launch. Then app and all packages can read it.
@@ -19,6 +19,14 @@ public enum Log {
 
     @inline(__always)
     static let errorLog = OSLog(subsystem: defaultSubsystem, category: "Errors")
+
+    @inline(__always)
+    static let poiLog = OSLog(subsystem: defaultSubsystem, category: "PointsOfInterest")
+
+    @inline(__always)
+    private static func logFault(_ message: String) {
+        os_log("%{public}@", log: errorLog, type: .fault, message)
+    }
 
     @inline(__always)
     private static func logError(_ message: String) {
@@ -98,14 +106,16 @@ public enum Log {
     }
 
     @inline(__always)
-    public static func assertionFailure(
+    public static func fault(
         file: String = #file,
         function: String = #function,
         line: Int = #line,
         _ items: Any?...,
     ) {
-        let message = "⛔️ " + assembleMessage(file: file, function: function, line: line, items)
-        Swift.assertionFailure(message)
+        autoreleasepool {
+            let message = "⛔️ " + assembleMessage(file: file, function: function, line: line, items)
+            logFault(message)
+        }
     }
 
     public static func printCallStack() {
@@ -118,5 +128,17 @@ public enum Log {
         Log.error(
             lines.joined(separator: "\n"),
         )
+    }
+}
+
+extension Log {
+    @inline(__always)
+    public static func signpost(
+        _ type: OSSignpostType,
+        name: StaticString
+    ) {
+        guard buildConfig == .debug else { return }
+
+        os_signpost(type, log: poiLog, name: name)
     }
 }

@@ -4,14 +4,26 @@ import SPFKBase
 import Testing
 
 class ExceptionTrapTests: TestCaseModel {
-    @Test func swiftError() throws {
+    struct Object {
         func throwError() throws {
             throw NSError(description: #function)
         }
+    }
+
+    @Test func swiftErrorWithSelf() async throws {
+        try await wait(sec: 4)
+        
+        var object: Object? = Object()
 
         #expect(throws: Error.self) {
-            try ExceptionTrap.withThrowing { try throwError() }
+            try ExceptionTrap.withThrowing {
+                try object?.throwError()
+            }
         }
+        
+        object = nil
+
+        try await wait(sec: 4)
     }
 
     @Test func nsError() async throws {

@@ -19,7 +19,7 @@ public enum ExceptionTrap {
                 Log.error(exception.name.rawValue, exception.reason)
                 // Log.error(exception.callStackSymbols.joined(separator: "\n"))
                 swiftError = exception.error
-            },
+            }
         )
 
         if let swiftError {
