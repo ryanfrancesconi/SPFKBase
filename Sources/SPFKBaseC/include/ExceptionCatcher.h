@@ -1,6 +1,5 @@
-// Copyright AudioKit. All Rights Reserved. Revision History at http://github.com/AudioKit/AudioKit/
-
-//  Inspired by https://github.com/RedRoma/SwiftExceptionCatcher
+// ExceptionHandler.h
+#import <Foundation/Foundation.h>
 
 #import <Foundation/Foundation.h>
 
