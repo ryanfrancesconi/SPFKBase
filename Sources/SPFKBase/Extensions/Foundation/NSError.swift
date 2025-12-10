@@ -18,4 +18,25 @@ extension NSError {
             userInfo: userInfo
         )
     }
+
+    public convenience init(
+        domain: String = Log.defaultSubsystem,
+        code: Int = 1,
+        file: String,
+        function: String,
+        description: String,
+    ) {
+        let fileName = (file as NSString).lastPathComponent
+        let message = "\(fileName):\(function):" + description
+
+        let userInfo: [String: Any] = [
+            NSLocalizedDescriptionKey: message,
+        ]
+
+        self.init(
+            domain: domain,
+            code: code,
+            userInfo: userInfo
+        )
+    }
 }
