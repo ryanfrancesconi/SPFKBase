@@ -47,7 +47,8 @@ extension String {
 // MARK: - Character Filters
 
 extension String {
-    public var titleCased: String {
+    /// theCamel = The Camel
+    public var spacedTitleCased: String {
         replacingOccurrences(
             of: "([A-Z])",
             with: " $1",
@@ -55,7 +56,7 @@ extension String {
             range: range(of: self)
         )
         .trimmingCharacters(in: .whitespacesAndNewlines)
-        .capitalized // If input is in llamaCase
+        .capitalized // If input is in camelCase
     }
 }
 
