@@ -10,7 +10,8 @@ extension URL {
         let genericType = "application/octet-stream"
 
         guard let type = UTType(filenameExtension: pathExtension),
-              let mimetype = type.preferredMIMEType else {
+              let mimetype = type.preferredMIMEType
+        else {
             // hack, this isn't coming through.
             if pathExtension == "caf" {
                 return "audio/x-caf"
@@ -36,9 +37,34 @@ extension URL {
         return value.creationDate
     }
 
-    public var modificationDate: Date? {
+    /// When the file's contents (the data stream) were last written to.
+    public var contentModificationDate: Date? {
         guard let value = try? resourceValues(forKeys: [.contentModificationDateKey]) else { return nil }
         return value.contentModificationDate
+    }
+
+    /// This date reflects when any of the file's metadata (attributes) were last modified
+    public var attributeModificationDate: Date? {
+        guard let value = try? resourceValues(forKeys: [.attributeModificationDateKey]) else { return nil }
+        return value.attributeModificationDate
+    }
+
+    /// Returns the most recent modification date after refreshing, content or attribute
+    public var modificationDate: Date? {
+        var uncached = self
+
+        uncached.removeCachedResourceValue(forKey: .contentModificationDateKey)
+        uncached.removeCachedResourceValue(forKey: .attributeModificationDateKey)
+
+        guard let contentModificationDate = uncached.contentModificationDate,
+              let attributeModificationDate = uncached.attributeModificationDate
+        else { return nil }
+
+        if contentModificationDate > attributeModificationDate {
+            return contentModificationDate
+        }
+
+        return attributeModificationDate
     }
 
     public var isDirectory: Bool {
