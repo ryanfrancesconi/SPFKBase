@@ -9,16 +9,19 @@ extension String {
 
 extension String {
     /// Retains only ASCII alphanumerics, `+`, `-`, and `_`
+    @_disfavoredOverload
     public func onlyASCIIAlphanumericsPlusMinusUnderscore() -> String {
         let okayChars = "abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLKMNOPQRSTUVWXYZ1234567890+-_"
         return only(charactersIn: okayChars)
     }
 
     /// Translate U+00A0 NO-BREAK SPACE to standard " "
+    @_disfavoredOverload
     public func normalizedWhitespaces() -> String {
         removing(characters: Self.nbsp)
     }
 
+    @_disfavoredOverload
     public var abbreviated: String {
         let input = onlyASCIIAlphanumericsPlusMinusUnderscore()
         let uppercaseLetters = input.only(.uppercaseLetters).prefix(4).string
@@ -48,6 +51,7 @@ extension String {
 
 extension String {
     /// theCamel = The Camel
+    @_disfavoredOverload
     public var spacedTitleCased: String {
         replacingOccurrences(
             of: "([A-Z])",
@@ -63,11 +67,12 @@ extension String {
 // MARK: - Comparison
 
 extension String {
-    // because I keep forgetting this syntax
+    @_disfavoredOverload
     public func equalsIgnoringCase(_ string: String) -> Bool {
         caseInsensitiveCompare(string) == .orderedSame
     }
 
+    @_disfavoredOverload
     public func standardCompare(with otherString: String, ascending: Bool = true) -> Bool {
         let comparisonResult = localizedStandardCompare(otherString)
 
@@ -84,6 +89,7 @@ extension StringProtocol {
     ///
     /// - Optionally, you can allow duplicates or allow empty elements.
     /// - Omits elements starting with a null character.
+    @_disfavoredOverload
     public func splitDelimited(delimiter: String = ",",
                                allowDuplicates: Bool = false,
                                allowEmptyElements: Bool = false) -> [String]
@@ -106,6 +112,7 @@ extension StringProtocol {
 
 extension StringProtocol {
     /// Convenience function to return a new string with whitespaces and newlines trimmed off start and end.
+    @_disfavoredOverload
     public var trimmed: String {
         trimmingCharacters(in: .whitespacesAndNewlines)
     }
@@ -113,28 +120,33 @@ extension StringProtocol {
 
 extension StringProtocol {
     /// Convenience conversion
+    @_disfavoredOverload
     public var auValue: AUValue? {
         AUValue(self)
     }
 
     // useful for xml parsing
+    @_disfavoredOverload
     public var boolValue: Bool {
         lowercased() == "true" || self == "1"
     }
 }
 
 extension String {
+    @_disfavoredOverload
     public var urlEncoded: String? {
         addingPercentEncoding(withAllowedCharacters: .urlAllowed)
     }
 
+    @_disfavoredOverload
     public var urlQueryEncoded: String? {
         urlEncoded?.replacingOccurrences(of: "%20", with: "+")
     }
 }
 
 extension CharacterSet {
+    /// as per RFC 3986
     public static let urlAllowed: CharacterSet = .alphanumerics.union(
         .init(charactersIn: "-._~")
-    ) // as per RFC 3986
+    )
 }
