@@ -110,13 +110,13 @@ extension StringProtocol {
     }
 }
 
-extension StringProtocol {
-    /// Convenience function to return a new string with whitespaces and newlines trimmed off start and end.
-    @_disfavoredOverload
-    public var trimmed: String {
-        trimmingCharacters(in: .whitespacesAndNewlines)
-    }
-}
+//extension StringProtocol {
+//    /// Convenience function to return a new string with whitespaces and newlines trimmed off start and end.
+//    @_disfavoredOverload
+//    public var trimmed: String {
+//        trimmingCharacters(in: .whitespacesAndNewlines)
+//    }
+//}
 
 extension StringProtocol {
     /// Convenience conversion
